@@ -1,0 +1,57 @@
+# ─── Dependencies ───────────────────────────────
+node_modules/
+
+# ─── Environment Variables (SECRETS - NEVER COMMIT) ──
+.env
+.env.*
+!.env.example
+
+# ─── Next.js ────────────────────────────────────
+.next/
+out/
+build/
+
+# ─── Backend Build ──────────────────────────────
+dist/
+
+# ─── Prisma Generated ──────────────────────────
+generated/prisma/
+
+# ─── Debug Logs ─────────────────────────────────
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ─── OS Files ───────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── IDE / Editor ───────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ─── Package Manager ───────────────────────────
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ─── Testing ────────────────────────────────────
+coverage/
+
+# ─── TypeScript ─────────────────────────────────
+*.tsbuildinfo
+
+# ─── Vercel ─────────────────────────────────────
+.vercel
+
+# ─── Misc ───────────────────────────────────────
+*.pem

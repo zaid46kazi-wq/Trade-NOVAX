@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String         @id @default(uuid())
+  email          String         @unique
+  name           String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  subscription   Subscription?
+  watchlists     Watchlist[]
+  predictionLogs PredictionLog[]
+}
+
+model Subscription {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  planType         String   // Starter, Pro, Enterprise
+  stripeCustomerId String?
+  status           String   // active, past_due, canceled
+  startDate        DateTime @default(now())
+  endDate          DateTime?
+}
+
+model Watchlist {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  assetPair String   // e.g., BTCUSDT, EURUSD
+  assetType String   // crypto, forex
+  addedAt   DateTime @default(now())
+
+  @@unique([userId, assetPair])
+}
+
+model PredictionLog {
+  id              String   @id @default(uuid())
+  userId          String?  // nullable if prediction was global/system
+  user            User?    @relation(fields: [userId], references: [id])
+  assetPair       String
+  predictionType  String   // Buy, Sell, Wait
+  confidence      Float    // 0.0 to 100.0
+  riskLevel       String   // Low, Medium, High
+  entryPrice      Float?
+  takeProfit      Float?
+  stopLoss        Float?
+  patternDetected String?
+  sentiment       String?
+  reasoning       String?  // AI logic details
+  timestamp       DateTime @default(now())
+}

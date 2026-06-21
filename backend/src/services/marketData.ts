@@ -17,6 +17,7 @@ export class MarketDataEngine {
   private twelveDataWs: WebSocket | null = null;
   private activePairs: Set<string> = new Set(['BTCUSDT', 'ETHUSDT', 'EURUSD', 'GBPUSD']);
   private candleHistory: Record<string, Candle[]> = {};
+  private mockIntervals: Record<string, NodeJS.Timeout> = {};
 
   constructor(io: SocketIOServer) {
     this.io = io;
@@ -71,6 +72,8 @@ export class MarketDataEngine {
 
     this.binanceWs.on('open', () => {
       console.log('Connected to Binance WebSocket API.');
+      this.stopMockEngine('BTCUSDT');
+      this.stopMockEngine('ETHUSDT');
     });
 
     this.binanceWs.on('message', (data: WebSocket.Data) => {
@@ -151,6 +154,8 @@ export class MarketDataEngine {
 
     this.twelveDataWs.on('open', () => {
       console.log('Connected to Twelve Data WebSocket API.');
+      this.stopMockEngine('EURUSD');
+      this.stopMockEngine('GBPUSD');
       // Subscribe to Forex pairs
       const subscribeMsg = {
         action: 'subscribe',
@@ -221,8 +226,9 @@ export class MarketDataEngine {
 
   // Generates real-time mock updates for fallback
   private startMockEngine(pair: string) {
+    if (this.mockIntervals[pair]) return;
     console.log(`Starting Mock Real-Time Ticker for ${pair}`);
-    setInterval(() => {
+    this.mockIntervals[pair] = setInterval(() => {
       const history = this.candleHistory[pair] || [];
       if (history.length === 0) return;
 
@@ -260,5 +266,13 @@ export class MarketDataEngine {
         timestamp: Date.now(),
       });
     }, 1000);
+  }
+
+  private stopMockEngine(pair: string) {
+    if (this.mockIntervals[pair]) {
+      console.log(`Stopping Mock Real-Time Ticker for ${pair}`);
+      clearInterval(this.mockIntervals[pair]);
+      delete this.mockIntervals[pair];
+    }
   }
 }

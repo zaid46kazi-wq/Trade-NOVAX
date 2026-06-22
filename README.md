@@ -13,7 +13,7 @@
 
 *A next-generation, institutional-grade trading terminal that fuses real-time WebSocket market feeds with Google Gemini AI to deliver predictive intelligence, Smart Money Concept (SMC) analysis, and an AI copilot — all wrapped in a stunning cyberpunk holographic interface.*
 
-[Live Demo](#) · [Report Bug](https://github.com/zaid46kazi-wq/Trade-NOVAX/issues) · [Request Feature](https://github.com/zaid46kazi-wq/Trade-NOVAX/issues)
+[Live Demo](https://github.com/zaid46kazi-wq/Trade-NOVAX) · [Report Bug](https://github.com/zaid46kazi-wq/Trade-NOVAX/issues) · [Request Feature](https://github.com/zaid46kazi-wq/Trade-NOVAX/issues)
 
 </div>
 

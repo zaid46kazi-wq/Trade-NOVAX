@@ -13,8 +13,9 @@ export default function NewsSentiment() {
     if (!headline) return;
 
     setLoading(true);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
     try {
-      const res = await fetch("http://localhost:5000/api/news/sentiment", {
+      const res = await fetch(`${apiUrl}/api/news/sentiment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ articles: [headline] })
@@ -79,10 +80,11 @@ export default function NewsSentiment() {
             </div>
           </div>
           <p className="text-slate-300 text-sm leading-relaxed relative z-10 border-l-2 border-slate-700 pl-4 italic">
-            "{sentiment.summary}"
+            &quot;{sentiment.summary}&quot;
           </p>
         </div>
       )}
+
     </div>
   );
 }

@@ -15,69 +15,68 @@ export default function LandingHero() {
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="mb-8"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-900/30 border border-cyan-500/30 text-cyan-400 text-sm font-semibold tracking-[0.2em] uppercase mb-6 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            System Online: 2035 Build
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-950/40 border border-amber-500/30 text-amber-400 text-xs font-semibold tracking-[0.2em] uppercase mb-6 font-mono">
+            <span className="w-2 h-2 rounded-full bg-amber-400 pulse-live"></span>
+            Institutional Trading Intelligence
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-500 tracking-tighter drop-shadow-[0_0_40px_rgba(0,240,255,0.3)]">
-            TRADENOVA <span className="text-cyan-500">X</span>
+          <h1 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-amber-400 tracking-tight font-sans">
+            TRADE-NOVA<span className="text-amber-500">X</span>
           </h1>
           
-          <p className="mt-6 text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto font-light leading-relaxed">
-            Analyze markets in real-time using machine learning, advanced pattern recognition, and <strong className="text-white font-medium">holographic neural intelligence.</strong>
+          <p className="mt-5 text-lg md:text-xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
+            Multi-asset market intelligence, real-time WebSocket orderbook analytics, and quant execution powered by <strong className="text-slate-200 font-medium">Google Gemini AI</strong>.
           </p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          className="flex flex-col sm:flex-row gap-6 mt-10"
+          transition={{ delay: 0.3, duration: 0.4 }}
+          className="flex flex-col sm:flex-row gap-4 mt-6"
         >
           <Link href="/terminal">
-            <button className="relative group overflow-hidden bg-cyan-600/20 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-300 px-10 py-4 rounded-xl font-bold tracking-widest uppercase transition-all shadow-[0_0_30px_rgba(0,240,255,0.15)] hover:shadow-[0_0_50px_rgba(0,240,255,0.4)] backdrop-blur-md flex items-center gap-3">
-              <Zap size={20} className="group-hover:animate-pulse" />
-              Launch Terminal
-              <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+            <button className="relative group overflow-hidden bg-amber-600 hover:bg-amber-500 text-slate-950 font-extrabold px-8 py-3.5 rounded font-mono text-xs tracking-widest uppercase transition-all shadow-[0_0_20px_rgba(217,119,6,0.25)] flex items-center gap-2">
+              <Zap size={16} />
+              Launch Trading Terminal
             </button>
           </Link>
           
-          <button className="px-10 py-4 rounded-xl font-bold tracking-widest uppercase text-slate-400 hover:text-white transition-colors border border-transparent hover:border-slate-700 backdrop-blur-sm">
-            Initialize Demo
-          </button>
+          <Link href="/terminal">
+            <button className="px-8 py-3.5 rounded font-mono text-xs tracking-widest uppercase text-slate-300 hover:text-white transition-colors border border-[#252b38] bg-[#12141a] hover:bg-[#181c25]">
+              Virtual Paper Sandbox
+            </button>
+          </Link>
         </motion.div>
 
         {/* Feature Grid Below the Fold */}
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-32 w-full max-w-4xl"
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-20 w-full max-w-4xl text-left"
         >
-          <div className="glass-panel p-6 rounded-2xl flex flex-col items-center text-center">
-            <Activity className="text-purple-400 mb-4" size={32} />
-            <h3 className="text-white font-semibold mb-2">Neural Prediction</h3>
-            <p className="text-slate-500 text-sm">Gemini-powered pattern recognition scanning real-time websocket streams.</p>
+          <div className="terminal-panel p-5 bg-[#101217] flex flex-col">
+            <Activity className="text-amber-400 mb-3" size={24} />
+            <h3 className="text-slate-200 font-bold text-sm mb-1 font-mono uppercase">AI Market Analyst</h3>
+            <p className="text-slate-400 text-xs leading-relaxed">Gemini 2.5 structured market regime breakdown, support/resistance zones, and scenario invalidation.</p>
           </div>
-          <div className="glass-panel p-6 rounded-2xl flex flex-col items-center text-center">
-            <ShieldAlert className="text-cyan-400 mb-4" size={32} />
-            <h3 className="text-white font-semibold mb-2">Risk Engine</h3>
-            <p className="text-slate-500 text-sm">Dynamic confidence spheres quantifying trade danger metrics in real-time.</p>
+          <div className="terminal-panel p-5 bg-[#101217] flex flex-col">
+            <ShieldAlert className="text-emerald-400 mb-3" size={24} />
+            <h3 className="text-slate-200 font-bold text-sm mb-1 font-mono uppercase">Risk Calculator</h3>
+            <p className="text-slate-400 text-xs leading-relaxed">Mathematical position sizing, stop-loss distance, notional exposure, and risk/reward optimization.</p>
           </div>
-          <div className="glass-panel p-6 rounded-2xl flex flex-col items-center text-center">
-            <Zap className="text-emerald-400 mb-4" size={32} />
-            <h3 className="text-white font-semibold mb-2">Whale Tracking</h3>
-            <p className="text-slate-500 text-sm">Visualize institutional movements via animated data streams.</p>
+          <div className="terminal-panel p-5 bg-[#101217] flex flex-col">
+            <Zap className="text-amber-500 mb-3" size={24} />
+            <h3 className="text-slate-200 font-bold text-sm mb-1 font-mono uppercase">Verified Block Trades</h3>
+            <p className="text-slate-400 text-xs leading-relaxed">Real exchange aggregate trade streams monitoring institutional orders exceeding $50k.</p>
           </div>
         </motion.div>
       </div>
-
-      {/* Decorative Scanline Overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] z-50 opacity-20"></div>
     </>
   );
 }
+

@@ -1,6 +1,6 @@
 "use client";
 
-import { Newspaper, AlertCircle } from "lucide-react";
+import { Newspaper } from "lucide-react";
 
 export default function NewsImpactCenter() {
   return (
@@ -23,7 +23,7 @@ export default function NewsImpactCenter() {
           </h4>
           
           <p className="text-slate-400 text-xs italic mb-3">
-            "AI indicates this macro shift will drive liquidity directly into high-cap crypto assets over the next 48 hours."
+            &quot;AI indicates this macro shift will drive liquidity directly into high-cap crypto assets over the next 48 hours.&quot;
           </p>
           
           <div className="flex gap-2">
@@ -47,10 +47,11 @@ export default function NewsImpactCenter() {
           </h4>
           
           <p className="text-slate-400 text-xs italic mb-3">
-            "Anticipated sell pressure on European-based exchanges. Expected volatility increase."
+            &quot;Anticipated sell pressure on European-based exchanges. Expected volatility increase.&quot;
           </p>
         </div>
       </div>
     </div>
   );
 }
+

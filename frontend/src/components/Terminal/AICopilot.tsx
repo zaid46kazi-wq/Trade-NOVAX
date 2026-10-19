@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquare, Send, Bot, X, Sparkles, Zap, Trash2, ChevronDown } from "lucide-react";
+import { MessageSquare, Send, Bot, X, Sparkles, Trash2, ChevronDown } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -33,7 +33,7 @@ function renderFormattedText(text: string) {
     if (line.trim().startsWith("•") || line.trim().startsWith("-") || line.trim().match(/^\d+\./)) {
       return (
         <div key={i} className="flex gap-1.5 ml-1 mt-0.5">
-          <span className="text-cyan-500 shrink-0 mt-0.5">
+          <span className="text-amber-500 shrink-0 mt-0.5">
             {line.trim().match(/^\d+\./) ? line.trim().match(/^\d+\./)![0] : "•"}
           </span>
           <span>{line.trim().match(/^\d+\./) ? rendered.slice(0).join("").replace(/^\d+\.\s*/, "") : rendered}</span>
@@ -56,23 +56,52 @@ function TypingIndicator() {
     <div className="flex justify-start">
       <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl rounded-tl-none p-3 flex items-center gap-1.5">
         <div className="flex gap-1">
-          <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-          <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-          <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+          <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+          <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+          <span className="w-1.5 h-1.5 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
         </div>
-        <span className="text-[10px] text-slate-500 ml-1.5 uppercase tracking-wider">Jarvis is thinking...</span>
+        <span className="text-[10px] text-slate-500 ml-1.5 uppercase tracking-wider">Jarvis is analyzing...</span>
       </div>
     </div>
   );
 }
 
-export default function AICopilot() {
-  const [isOpen, setIsOpen] = useState(false);
+// Simple pair detection from user text
+function detectPairFromText(text: string): string {
+  const upper = text.toUpperCase();
+  const pairs = ["BTCUSDT", "ETHUSDT", "EURUSD", "GBPUSD", "XAUUSD", "SOLUSDT"];
+  for (const p of pairs) {
+    if (upper.includes(p)) return p;
+  }
+  if (upper.includes("BTC") || upper.includes("BITCOIN")) return "BTCUSDT";
+  if (upper.includes("ETH") || upper.includes("ETHEREUM")) return "ETHUSDT";
+  if (upper.includes("EUR")) return "EURUSD";
+  if (upper.includes("GBP") || upper.includes("POUND")) return "GBPUSD";
+  if (upper.includes("GOLD") || upper.includes("XAU")) return "XAUUSD";
+  return "";
+}
+
+const formatTime = (ts: number) => {
+  return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+};
+
+interface AICopilotProps {
+  isOpenControlled?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export default function AICopilot({ isOpenControlled, onOpenChange }: AICopilotProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = isOpenControlled !== undefined ? isOpenControlled : internalOpen;
+  const setIsOpen = (val: boolean) => {
+    setInternalOpen(val);
+    onOpenChange?.(val);
+  };
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "ai",
-      text: "JARVIS Online. I have access to live market feeds for **BTCUSDT**, **ETHUSDT**, **EURUSD**, and **GBPUSD**.\n\nI can analyze charts, detect patterns, suggest trade setups with entry/SL/TP, and answer anything about the markets.\n\nWhat would you like to scan?",
-      timestamp: Date.now(),
+      text: "JARVIS Online. Connected to live feeds for **BTCUSDT**, **ETHUSDT**, **EURUSD**, and **GBPUSD**.\n\nAsk me anything about market structure, technical indicators, trade setups, or risk parameters.",
+      timestamp: 0,
     },
   ]);
   const [input, setInput] = useState("");
@@ -114,20 +143,18 @@ export default function AICopilot() {
     }
   }, [isOpen]);
 
-  const handleSend = async (text: string) => {
+  const handleSend = useCallback(async (text: string) => {
     if (!text.trim() || isLoading) return;
 
-    const userMessage: Message = { role: "user", text: text.trim(), timestamp: Date.now() };
+    const currentTimestamp = Date.now();
+    const userMessage: Message = { role: "user", text: text.trim(), timestamp: currentTimestamp };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
-      // Build conversation history for API
       const allMessages = [...messages, userMessage];
       const apiMessages = allMessages.map((m) => ({ role: m.role === "ai" ? "assistant" : "user", text: m.text }));
-
-      // Detect active pair from the conversation
       const activePair = detectPairFromText(text);
 
       const response = await fetch(`${API_URL}/api/copilot/chat`, {
@@ -146,48 +173,28 @@ export default function AICopilot() {
         ...prev,
         { role: "ai", text: data.reply || "I encountered an issue processing your request. Please try again.", timestamp: Date.now() },
       ]);
-    } catch (err) {
-      console.error("Copilot API error:", err);
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
           role: "ai",
-          text: "⚠️ Connection to TradeNova backend lost. Make sure the backend server is running on port 5000.\n\nTry restarting with `npm run dev` in the backend directory.",
+          text: "⚠️ Connection to TradeNova backend server offline. You can test market analytics using our client-side modules in the terminal.",
           timestamp: Date.now(),
         },
       ]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isLoading, messages]);
 
   const clearChat = () => {
     setMessages([
       {
         role: "ai",
         text: "Memory cleared. JARVIS re-initialized.\n\nWhat would you like to analyze?",
-        timestamp: Date.now(),
+        timestamp: 0,
       },
     ]);
-  };
-
-  // Simple pair detection from user text
-  function detectPairFromText(text: string): string {
-    const upper = text.toUpperCase();
-    const pairs = ["BTCUSDT", "ETHUSDT", "EURUSD", "GBPUSD", "XAUUSD", "SOLUSDT"];
-    for (const p of pairs) {
-      if (upper.includes(p)) return p;
-    }
-    if (upper.includes("BTC") || upper.includes("BITCOIN")) return "BTCUSDT";
-    if (upper.includes("ETH") || upper.includes("ETHEREUM")) return "ETHUSDT";
-    if (upper.includes("EUR")) return "EURUSD";
-    if (upper.includes("GBP") || upper.includes("POUND")) return "GBPUSD";
-    if (upper.includes("GOLD") || upper.includes("XAU")) return "XAUUSD";
-    return "";
-  }
-
-  const formatTime = (ts: number) => {
-    return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (

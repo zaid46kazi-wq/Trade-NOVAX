@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Bot, Zap, Shield, TrendingUp, TrendingDown, Clock, Activity, Sparkles } from "lucide-react";
+import { Bot, Shield, TrendingUp, TrendingDown, Activity, Sparkles } from "lucide-react";
 import { getSocket } from "../lib/socket";
 
 interface Prediction {
@@ -22,7 +22,7 @@ export default function AIPredictionPanel({ pair = "BTCUSDT" }: { pair?: string 
 
   useEffect(() => {
     const socket = getSocket();
-    socket.on("prediction", (data: any) => {
+    socket.on("prediction", (data: Prediction) => {
       setPrediction({
         recommendation: data.recommendation,
         confidence: data.confidence,
@@ -40,14 +40,16 @@ export default function AIPredictionPanel({ pair = "BTCUSDT" }: { pair?: string 
 
   const handleManualPredict = async () => {
     setLoading(true);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
     try {
-      const res = await fetch(`http://localhost:5000/api/predict/${pair}`, { method: "POST" });
+      const res = await fetch(`${apiUrl}/api/predict/${pair}`, { method: "POST" });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setPrediction(data);
     } catch (err) {
       console.error("Prediction failed:", err);
     } finally {
+
       setLoading(false);
     }
   };
@@ -156,9 +158,10 @@ export default function AIPredictionPanel({ pair = "BTCUSDT" }: { pair?: string 
             <Bot size={40} className="text-slate-600" />
           </div>
           <p className="text-lg font-medium text-slate-400">Awaiting Signal Generation</p>
-          <p className="text-sm mt-2 text-slate-600 max-w-xs text-center">Click "Generate Signal" to trigger the neural network for {pair}</p>
+          <p className="text-sm mt-2 text-slate-600 max-w-xs text-center">Click &quot;Generate Signal&quot; to trigger the neural network for {pair}</p>
         </div>
       )}
     </div>
   );
 }
+

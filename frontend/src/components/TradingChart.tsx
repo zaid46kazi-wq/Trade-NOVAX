@@ -14,15 +14,25 @@ interface CandleData {
   volume?: number;
 }
 
+interface RawCandle {
+  time: number;
+  open?: number;
+  high?: number;
+  low?: number;
+  close: number;
+  volume?: number;
+}
+
 export default function TradingChart({ pair = "BTCUSDT" }: { pair?: string }) {
   const [data, setData] = useState<CandleData[]>([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/candles/${pair}`)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    fetch(`${apiUrl}/api/candles/${pair}`)
       .then((res) => res.json())
-      .then((history) => {
+      .then((history: RawCandle[]) => {
         if (Array.isArray(history)) {
-          const formatted = history.map((c: any) => ({
+          const formatted = history.map((c) => ({
             time: new Date(c.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             close: c.close,
           }));
@@ -33,7 +43,7 @@ export default function TradingChart({ pair = "BTCUSDT" }: { pair?: string }) {
 
     const socket = getSocket();
     socket.emit("subscribe", pair);
-    socket.on("new_candle", (payload: { pair: string; candle: any }) => {
+    socket.on("new_candle", (payload: { pair: string; candle: RawCandle }) => {
       if (payload.pair === pair) {
         setData((prev) => {
           const newData = [...prev, {
@@ -51,6 +61,7 @@ export default function TradingChart({ pair = "BTCUSDT" }: { pair?: string }) {
       socket.off("new_candle");
     };
   }, [pair]);
+
 
   return (
     <div className="w-full h-[450px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all hover:border-cyan-500/30">

@@ -1,6 +1,7 @@
 "use client";
 
-import { Globe, TrendingDown, TrendingUp } from "lucide-react";
+import { Globe, TrendingDown } from "lucide-react";
+
 
 export default function ForexIntelligence() {
   return (

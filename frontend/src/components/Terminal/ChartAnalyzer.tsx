@@ -1,7 +1,8 @@
 "use client";
 
-import { UploadCloud, Image as ImageIcon, Sparkles } from "lucide-react";
+import { UploadCloud, Sparkles } from "lucide-react";
 import { useState } from "react";
+
 
 export default function ChartAnalyzer() {
   const [isUploading, setIsUploading] = useState(false);

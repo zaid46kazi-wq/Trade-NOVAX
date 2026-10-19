@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Trade Nova Terminal",
-  description: "Advanced AI-powered trading terminal",
+  title: "Trade-NOVAX | Institutional AI Trading Terminal",
+  description: "Bloomberg-inspired multi-asset AI market intelligence and quant execution terminal.",
 };
 
 export default function RootLayout({
@@ -17,15 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-[#020617] text-slate-50 min-h-screen antialiased selection:bg-cyan-500/30 selection:text-cyan-50 overflow-hidden`}
+        className={`${inter.className} bg-[#090a0c] text-slate-100 min-h-screen antialiased selection:bg-amber-500/20 selection:text-amber-200 overflow-x-hidden`}
         suppressHydrationWarning
       >
-        {/* Ambient background glow */}
-        <div className="fixed top-0 left-0 w-[40%] h-[40%] rounded-full bg-cyan-900/20 blur-[120px] pointer-events-none -translate-x-[10%] -translate-y-[10%]" />
-        <div className="fixed bottom-0 right-0 w-[40%] h-[40%] rounded-full bg-indigo-900/20 blur-[120px] pointer-events-none translate-x-[10%] translate-y-[10%]" />
-        
         {children}
       </body>
     </html>
   );
 }
+
